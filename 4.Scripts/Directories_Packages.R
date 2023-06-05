@@ -1,9 +1,10 @@
+"
 ## scRNA analysis - R packages and Directories Script
 ## Author: Maria Tsalkitzidou
 ## Date: 19/12/2022
 
 ##This script contains all the directories used in this analysis and also loads all the packages needed.
-
+"
 ##########################################################################################
 ## Load the necessary packages that are used in all scripts
 library(Seurat)
@@ -15,7 +16,7 @@ library(ggplot2)
 library(stringr)
 library(openxlsx)
 library(tidyverse)
-
+library(RColorBrewer)
 
 
 
@@ -28,10 +29,14 @@ qc.dir = "1.QC/"
 norm.dir = "2.NormalizationScaling/"
 
 if(!dir.exists(plot.dir)) dir.create(plot.dir)
-if(!dir.exists(qc.dir)) dir.create(qc.dir)
-if(!dir.exists(norm.dir)) dir.create(norm.dir)
+
 #-----------------------------------------------------------------------------------------------
 ## Color palettes
-cbPalette5_human <- c("deepskyblue4", "chocolate3", "cadetblue3", "slateblue3", "#FDB863")
-cbPalette5a_human <- c("deepskyblue4", "#FDB863", "chocolate3", "cadetblue3", "slateblue3")
-cbPalette10_rat <- c("#E69F00", "#56B4E9", "#117733", "#F0E442", "#0072B2", "#D55E00", "#CC6677", "#AA4499", "#44AA99", "#999933")
+celltypes.human <- c("deepskyblue4", "chocolate3", "cadetblue3", "slateblue3", "#FDB863")
+human.astrocyte.palette <- c("Blue3", "deepskyblue", "deepskyblue3", "cadetblue3")
+human.opc.palette <- c("#FDB863","#C9D12E", "#DC8315", "yellow4")
+
+rat.microglia.palette = c("#cb4335", "#ec7063", "#FF5733", "#C70039", "#d35400", "#7b241c")
+rat.astrocyte.palette = c("Blue3", "deepskyblue3", "cadetblue3", "deepskyblue", "Blue")
+rat.oligo.palette = c("#72d693", "#117733", "green2")
+rat.opc.palette = c("#E69F00", "darkorange1", "coral2", "yellow3", "#CB910F")

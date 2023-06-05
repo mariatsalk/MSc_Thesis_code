@@ -1,16 +1,17 @@
+"
 ## snRNA analysis - GO enrichment analysis
 ## Author: Maria Tsalkitzidou
 ## Date: 14/03/2023
-## Updated: 
+## Updated: 28/05/2023
 
-" I followed the tutorial from Harvard Chan Bioinformatics Core (HBC) learning hub:
-https://hbctraining.github.io/DGE_workshop/lessons/09_functional_analysis.html "
+I followed the tutorial from Harvard Chan Bioinformatics Core (HBC) learning hub:
+https://hbctraining.github.io/DGE_workshop/lessons/09_functional_analysis.html 
+"
+###############################################################################################
+#### Load the necessary packages and user defined variables ####
 
-#### STEP 1: Load the necessary packages and user defined variables ####
-
-## Set the working directory
 rm(list = ls()) #Remove (possible preloaded) objects from the environment to avoid conflicts
-setwd("/Users/Maria/Dropbox (DNPL)/snRNA_Maria_Final/glial_snRNAseq_analysis/4.Scripts")
+setwd("/Users/Maria/Dropbox (DNPL)/snRNA_Maria_Final/glial_snRNAseq_analysis/4.Scripts") ## Set the working directory
 
 ## Load the directories and necessary packages
 source("Directories_Packages.R")
@@ -19,27 +20,24 @@ source("snRNA_Functions.R")
 
 #----------------------------------------------------------------------------------------------
 ## User defined variables
-prefix="premRNARnor6--"
-obj.dir = "Rat_OPC_subclusters_VarFeat_Scaled_HARMONY_15PCs_res005_obj.rds" #The object to be loaded in the script
-species = "rat" #Name of the dataset to be loaded in the script (in this case: Human, Rat, Merged)
-celltype = "OPC"
+
+obj.dir = "" #The object to be loaded in the script
+species = "" #rat or human (all lowercase!!)
+prefix = NULL #prefix in front of the marker (in this case: "premRNAGRCH38-", "premRNARnor6--" or NULL if the prefix is removed)
+celltype = "" #cell type for which we want to run GSEA e.g. Astrocyte
 
 
 
 
-#----------------------------------------------------------------------------------------------
+###############################################################################################
 #### Load the data ####
 seurat.obj <- readRDS(file = paste0(seurat.dir, obj.dir))
 
 
 
 
-#----------------------------------------------------------------------------------------------
-#### GSEA following the tutorial: https://crazyhottommy.github.io/scRNA-seq-workshop-Fall-2019/scRNAseq_workshop_3.html ####
-
-
-
-## per brain area
+###############################################################################################
+#### GSEA per brain area ####
 for (area in levels(as.factor(seurat.obj$location))){
   
   fgseaRes.location <- fgsea_analysis(seurat.object=seurat.obj, group_type = "location", group_name = area, species_name = species)
@@ -69,7 +67,7 @@ for (area in levels(as.factor(seurat.obj$location))){
     theme(axis.text = element_text(size=12))
   
   
-  png(filename=paste0(plot.dir, species, "/", "4.DE/", celltype, "_", area, "_GSEA_BP_Barplot.png"), width = 1000, height = 400)
+  png(filename=paste0(plot.dir, species, "/4.DE/", celltype, "_", area, "_GSEA_BP_Barplot.png"), width = 1000, height = 400)
   print(GSEA.plot.location)
   dev.off()
   
@@ -77,8 +75,8 @@ for (area in levels(as.factor(seurat.obj$location))){
 
 
 
-
-## per cluster
+###############################################################################################
+#### per cluster ####
 for (cluster in levels(seurat.obj$seurat_clusters)){
   fgseaRes.cluster <- fgsea_analysis(seurat.object=seurat.obj, group_type = "seurat_clusters", group_name = as.character(cluster), species_name = species)
   
@@ -105,7 +103,7 @@ for (cluster in levels(seurat.obj$seurat_clusters)){
     theme_minimal() +
     theme(axis.text = element_text(size=12))
   
-  png(filename=paste0(plot.dir, species, "/", "4.DE/", celltype, "_Cluster", cluster, "_GSEA_BP_Barplot.png"), width = 1000, height = 400)
+  png(filename=paste0(plot.dir, species, "/4.DE/", celltype, "_Cluster", cluster, "_GSEA_BP_Barplot.png"), width = 1000, height = 400)
   print(GSEA.plot.cluster)
   dev.off()
   

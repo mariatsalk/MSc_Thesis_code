@@ -3,46 +3,26 @@
 ## Author: Maria Tsalkitzidou
 ## Date: 31/10/2022
 ## Updated: 13/01/2022
-
-Description:
-  The script takes as input a seurat object and produces several stacked bar plots and tables in csv format. The stacked bar plots produced are:
-  1) Types of cells per species (with %)
-  2) Types of cells per samples (with %)
-  3) Number of cells per species (with %)
-  4) Number of cells per samples (with %)
-  5) Types of cells per species & per samples (with %)
-The tables contain information about the number of cells (with %) per dataset (Human, Rat, Merged dataset)
-
-
-Procedure:
-
-
-
-Limitations:
-  1) Doesn't take input from the terminal
-  2) Isn't 100% generic
-
 "
 
 ###############################################################################################
 #### Load the necessary packages and user defined variables ####
 
-## Set the working directory
 rm(list = ls()) #Remove (possible preloaded) objects from the environment to avoid conflicts
-setwd("/Users/Maria/Dropbox (DNPL)/snRNA_Maria_Final/glial_snRNAseq_analysis/4.Scripts")
+setwd("/Users/Maria/Dropbox (DNPL)/snRNA_Maria_Final/glial_snRNAseq_analysis/4.Scripts") ## Set the working directory
 
 ## Load the directories and necessary packages
 source("Directories_Packages.R")
 
 #-------------------------------------------------------------------------------------
 # User defined variables. 
-dataset = "vMB_hVM_merged.seurat.all.20210920" #The Seurat object will start with this phrase/word
+dataset = "" #The Seurat object will start with this phrase/word
 
-obj.dir = "vMB_hVM_merged.seurat.all.20210920_raw_merged_object.rds" #Seurat object to load
+obj.dir = "" #Seurat object to load
 
-species = "human" #rat or human (all lowercase!!)
+species = "" #rat or human (all lowercase!!)
 
-colour.palette <- c()
+colour.palette <- c() #colours for the plots (per cell type)
 
 
 ###############################################################################################

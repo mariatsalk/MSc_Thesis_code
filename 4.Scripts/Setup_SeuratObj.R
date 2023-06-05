@@ -3,38 +3,24 @@
 ## Author: Maria Tsalkitzidou
 ## Created: 09/11/2022
 ## Updated: 14/02/2023
-
-Description:
-
-
-
-Procedure:
-
-
-
-Limitations:
-  
-
 "
 
 ##########################################################################################
-# STEP 1: Load the necessary packages and user defined variables
+#### Load the necessary packages and user defined variables ####
 
 
-#-------------------------------------------------------------------------------------
-## Set the working directory
 rm(list = ls()) #Remove (possible preloaded) objects from the environment to avoid conflicts
-setwd("/Users/Maria/Desktop/glial_snRNAseq_analysis/4.Scripts")
+setwd("/Users/Maria/Desktop/glial_snRNAseq_analysis/4.Scripts") ## Set the working directory
 
 ## Load the directories and necessary packages
 source("Directories_Packages.R")
 
 #-------------------------------------------------------------------------------------
 # User defined variables. 
-dataset = "vMB_hVM" #The Seurat object will start with this phrase/word
+dataset = "" #The Seurat object will start with this phrase/word (if species info included in the name of the file then it will appear after the species info)
 
 #The names of the samples that will become a merged Seurat object
-samples =  c("hVM_high_16C_1","hVM_high_32C_1","hVM_low_10A_1","hVM_low_30A_1","AF030_vMB_only_30_core_barcoded","AF030_vMB_only_30_edge_1_barcoded","AF030_vMB_only_30_edge_2_barcoded")
+samples =  c()
 
 #c("vMB_high_16_A_1", "vMB_high_16_A_2", "vMB_vFB_7_C_1", "vMB_vFB_7_C_2", "vMB_vFB_7_C_3", "vMB_vFB_7_C_4", "vMB_vFB_7_C_5", "vMB_vFB_7_C_6")
 
@@ -42,7 +28,7 @@ samples =  c("hVM_high_16C_1","hVM_high_32C_1","hVM_low_10A_1","hVM_low_30A_1","
 
 
 ##########################################################################################
-# STEP 2: Load the 10x reads and convert them to Seurat objects
+#### Load the 10x reads and convert them to Seurat objects ####
 
 #-------------------------------------------------------------------------------------
 ## Load the samples
@@ -56,8 +42,8 @@ for (file in samples){
 }
 
 
-#-------------------------------------------------------------------------------------
-## Create one merged Seurat object
+##########################################################################################
+#### Create one merged Seurat object ####
 merged.obj <- merge(x = hVM_high_16C_1, y = c(hVM_high_32C_1, hVM_low_10A_1,hVM_low_30A_1,AF030_vMB_only_30_core_barcoded,AF030_vMB_only_30_edge_1_barcoded,AF030_vMB_only_30_edge_2_barcoded),add.cell.id = c("16C1", "32C1", "10A1", "30A1", "AF030", "AF0301", "AF0302"))
 
 table(merged.obj$orig.ident)
@@ -69,7 +55,7 @@ table(merged.obj$orig.ident)
 merged.obj$location <- "Striatum"
 merged.obj$Age <- '6m'
 
-
+# Assign the species information 
 merged.obj$Human <- PercentageFeatureSet(merged.obj, pattern = "^(premRNAGRCH38-)?[A-Z]+")
 merged.obj$Rat <- PercentageFeatureSet(merged.obj, pattern = "^(premRNARnor6--)?[A-Z]{1}[a-z]+")
 merged.obj$Species <- NA
@@ -93,8 +79,9 @@ nCell <- table(merged.obj$location, merged.obj$Age) %>%
 
 write.xlsx(nCell, file = paste0(plot.dir, qc.dir, dataset, "_nCells.xlsx"))
 
-#-------------------------------------------------------------------------------------
-#save the raw merged object
+
+##########################################################################################
+#### Save the raw merged object ####
 saveRDS(merged.obj, file = paste0(seurat.dir, dataset, "_raw_merged_object.rds"))
 
 

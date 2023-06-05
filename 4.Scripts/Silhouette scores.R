@@ -40,42 +40,6 @@ before applying the function if you want to use another one."))
   return(sil.results)
 }
 
-compute_silhouette_scores(Cografting.human.neurons)
 
 
 
-################################################################################
-#Function for ROGUE
-#compute_rogue_scores <- function(seurat)
-  #{
-  #if(system.file(package="ROGUE") == ""){
-    #devtools::install_github("PaulingLiu/ROGUE")
-  #}
-  
-  #library(ROGUE)
-  #library(cluster)
-  #library(ggplot2)
-  #library(cowplot)
-  #library(tidyverse)
-  #library(Seurat)
-  
-  #expr <- as.matrix(GetAssayData(seurat))
-  #sil.results <- data.frame()
-  #clusters<-as.integer(seurat$seurat_clusters)
-
-  # ROGUE
-  #rogue.res <- rogue(expr, labels = clusters, samples = seurat$orig.ident, platform = "UMI", span = 1.6)
-  #sil.results <- rbind(sil.results,c(length(levels(seurat$seurat_clusters)),median(reshape2::melt(rogue.res)[,2],na.rm = T)))
-  #colnames(sil.results)<-c("Resolution","nClusters", "Average ROGUE")
-  #return(sil.results)
-#}
-
-#expr <- as.matrix(GetAssayData(OPC))
-#sil.results <- data.frame()
-#clusters<-as.integer(OPC$seurat_clusters)
-
-# ROGUE
-#rogue.res <- rogue(expr, labels = clusters, samples = OPC$orig.ident, platform = "UMI", span = 1.6)
-#sil.results <- rbind(sil.results,c(length(levels(OPC$seurat_clusters)),median(reshape2::melt(rogue.res)[,2],na.rm = T)))
-#colnames(sil.results)<-c("Resolution","nClusters", "Average ROGUE")
-#return(sil.results)

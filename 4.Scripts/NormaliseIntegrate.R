@@ -3,37 +3,23 @@
 ## Author: Maria Tsalkitzidou
 ## Created: 08/09/2022
 ## Updated: 24/10/2022
-
-Description:
-  The script takes as input graft samples from scRNA (or snRNA) sequencing,. It creates a seuray object, filters the seurat object and assigns the species (rat or human cells) as meta data information in the object and lastly splits the object in two new objects based on the species.
-
-
-Procedure:
-
-
-
-Limitations:
-  1) Doesn't take input from the terminal
-  2) Isn't 100% generic
-  
-
 "
+###############################################################################################
 #### Load the necessary packages and user defined variables ####
-
-## Set the working directory
 rm(list = ls()) #Remove (possible preloaded) objects from the environment to avoid conflicts
-setwd("/Users/Maria/Dropbox (DNPL)/snRNA_Maria_Final/glial_snRNAseq_analysis/4.Scripts")
+setwd("/Users/Maria/Dropbox (DNPL)/snRNA_Maria_Final/glial_snRNAseq_analysis/4.Scripts") ## Set the working directory
 
 ## Load the directories and necessary packages
 source("Directories_Packages.R")
+source("Silhouette scores.R")
 
 #-------------------------------------------------------------------------------------
 # User defined variables. 
-dataset = "SN&STR_" #The Seurat object will start with this phrase/word
+dataset = "" #The Seurat object will start with this phrase/word (if species info included in the name of the file then it will appear after the species info)
 
-obj.dir = "human_SN&STR_v2_RemovedLowQualitySamples&prefix_03032023.rds" #Seurat object to load
+obj.dir = "" #Seurat object to load
 
-species = "rat" #rat or human (all lowercase!!)
+species = "" #rat or human (all lowercase!!)
 #species_prefix = "premRNAGRCH38-" #premRNARnor6-- or premRNAGRCH38- for rat and human respectively
 
 
@@ -76,6 +62,9 @@ s.obj1 <- s.obj %>%
   FindClusters(resolution = 0.1) %>% 
   identity()
 
+
+compute_silhouette_scores(s.obj1, res.from = 0.05, res.to = 1.5, by= 0.01, plot=F)
+
 ## Plot the UMAP
 dimplot.obj1 <- DimPlot(s.obj1, label = F)
 dimplot.obj1.location <- DimPlot(s.obj1, group.by = "location", shuffle = T)
@@ -106,6 +95,8 @@ s.obj2 <- s.obj2 %>%
   FindNeighbors(reduction = "harmony", dims = 1:50) %>% 
   FindClusters(resolution = 0.05) %>% 
   identity()
+
+compute_silhouette_scores(s.obj2, res.from = 0.05, res.to = 1.5, by= 0.01, plot=F)
 
 ## Plot the UMAP with Harmony integration
 dimplot.obj2 <- DimPlot(s.obj2, label = F)

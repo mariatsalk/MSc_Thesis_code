@@ -3,51 +3,33 @@
 ## Author: Maria Tsalkitzidou
 ## Date: 11/10/2022
 ## Updated: 15/02/2023
-
-Description:
-  The script takes as input a seurat object and an R script with cell signature markers as vectors and plots the expression of the markers in violin and feature plots per marker.
-  As the file that contains the markers might not be applicable to our organism there is function that customizes the markers to our dataset (Human: premRNAGRCH38-, Rat: premRNARnor6--)
-  This script is customized to check for specific markers from the signature markers file and produce feature plots of the highest expressed markers per cell type
-
-
-Procedure:
-
-
-
-Limitations:
-  1) Doesn't take input from the terminal
-  2) Isn't 100% generic
-  3) If the merged dataset is loaded (both rat and human cells) it still finds and plots differentially expressed features for one of the two species
-
 "
- 
+############################################################################################### 
 #### Load the necessary packages and user defined variables ####
- 
-## Set the working directory
+
 rm(list = ls()) #Remove (possible preloaded) objects from the environment to avoid conflicts
-setwd("/Users/Maria/Dropbox (DNPL)/snRNA_Maria_Final/glial_snRNAseq_analysis/4.Scripts")
+setwd("/Users/Maria/Dropbox (DNPL)/snRNA_Maria_Final/glial_snRNAseq_analysis/4.Scripts") ## Set the working directory
  
 ## Load the directories and necessary packages
 source("Directories_Packages.R")
-source("Markers.R")
 source("snRNA_functions.R")
 
 #-------------------------------------------------------------------------------------------------------
 ## User defined variables
-obj.dir = "Human_SN&STR_v2_HARMONY_normalized&scaled_obj.rds" #The object to be loaded in the script
-species = "Human" #Name of the dataset to be loaded in the script (in this case: Human, Rat, Merged)
+obj.dir = "" #The object to be loaded in the script
+species = "" #Name of the dataset to be loaded in the script (in this case: Human, Rat, Merged)
 prefix = NULL #prefix in front of the marker (in this case: "premRNAGRCH38-", "premRNARnor6--" or NULL if the prefix is removed)
+markers.file = "" #path for excel file with markers to be tested. The first column should include the cell type and the second column the markers.
 
 
-
-#--------------------------------------------------------------------------------------------------------
-## Load the data
+###############################################################################################
+#### Load the data ####
 seurat.obj <- readRDS(file = paste0(seurat.dir, obj.dir))
 
-markers <- read_excel("../Markers.xlsx", sheet = 1)
+markers <- read_excel(markers.file, sheet = 1)
 
-#--------------------------------------------------------------------------------------------------------
-## Produce the Violin and Feature Plots
+###############################################################################################
+#### Produce the Violin and Feature Plots ####
 
 # Iterate throught the markers dataframe and produce the violin and feature plots for each celltype in the excel file
 for (celltype in 1:length(markers)){

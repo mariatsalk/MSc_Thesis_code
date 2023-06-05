@@ -3,34 +3,18 @@
 ## Author: Maria Tsalkitzidou
 ## Created: 08/09/2022
 ## Updated: 24/10/2022
-
-Description:
-  The script takes as input graft samples from scRNA (or snRNA) sequencing,. It creates a seuray object, filters the seurat object and assigns the species (rat or human cells) as meta data information in the object and lastly splits the object in two new objects based on the species.
-
-
-Procedure:
-
-
-
-Limitations:
-  1) Doesn't take input from the terminal
-  2) Isn't 100% generic
-  
-
 "
 
-#### STEP 1: Load the necessary packages ####
+####Load the necessary packages ####
 library(Seurat)
 library(dplyr)
 library(patchwork)
-library(rliger)
 library(readxl)
-library(stringr)
-library(DoubletFinder)
 
 
 
 
+################################################################################################################
 #### Function for automated species assignment ####
 
 # The function takes as input a seurat object, one or two species as string, one or two regex patterns (corresponding to the species) that will be used to separate the species, an upper threshold for the PercentageFeatureSet() and one lower threshold for PercentageFeatureSet()
@@ -41,6 +25,7 @@ species_assignment <- function(seurat.obj = data.obj,
                                pattern.species.2 = NULL,
                                upper.thresh = 80,
                                lower.thresh = 10){
+  
   # Check if one or two species were provided
   if(!is.null(species.2)){
     #Check that the user also provided a pattern, if not print error message
@@ -84,9 +69,10 @@ species_assignment <- function(seurat.obj = data.obj,
 
 
 ################################################################################################################
+#### Function for converting the case of markers based on species #### 
 # This function takes as input a vector or list of markers and the organism we want to convert the marker for. The output is a vector with the converted markers
 convert_markers <- function(markers, organism, organism.prefix=NULL){
-  
+  library(stringr)
   converted.markers <- c()
   
   # Change the user input to lowercase to avoid case-sensitivity
@@ -123,7 +109,7 @@ convert_markers <- function(markers, organism, organism.prefix=NULL){
 
 
 ################################################################################################################
-
+#### Function for GSEA analysis with fgsea ####
 fgsea_analysis <- function(seurat.object, group_type, group_name, species_name){
   # Install presto which performs a fast Wilcoxon rank sum test
   #install_github('immunogenomics/presto')
@@ -174,7 +160,8 @@ fgsea_analysis <- function(seurat.object, group_type, group_name, species_name){
   # select only the feature and auc columns for fgsea, which statistics to use is an open question
   groupname.genes <- seurat.genes %>%
     dplyr::filter(group == group_name) %>%
-    arrange(desc(logFC), desc(auc)) %>% 
+    arrange(desc(logFC), desc(auc)) %>%
+    dplyr::filter(logFC > 1.0) %>%
     dplyr::select(feature, auc)
   
   
